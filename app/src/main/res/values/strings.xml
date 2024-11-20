@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CRUD_2</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Log out</string>
+    <string name="qlsv">Quản lý sinh viên</string>
+    <string name="name">Name</string>
+    <string name="maSv">ID</string>
+    <string name="Nam">Male</string>
+    <string name="Nu">Female</string>
+    <string name="txtGioiTinh">Gentle</string>
+    <string name="add">Add student</string>
+    <string name="update">Update</string>
+    <string name="listSt">List of student</string>
+    <string name="delete">Delete</string>
+</resources>
