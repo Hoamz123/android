@@ -1,10 +1,12 @@
 package com.example.crud_2;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,128 +14,140 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crud_2.Model.MyAdapter;
 import com.example.crud_2.Model.Student;
+import com.example.crud_2.Model.onMyItemListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
-    private List<String> nameList,idList,gentleList;
+public class MainActivity extends AppCompatActivity implements onMyItemListener {
+    //khai bao nhung thu xuat hien tren giao dien chinh va can thao tac voi no
     private RecyclerView recyclerView;
-    private EditText edText1,edText2;
+    private MyAdapter adapter;
+    private Button btnAddStudent,btnUpdateStudent;//hai nut them va sua
     private RadioGroup radioGroup;
-    private RadioButton radioButtonMale,radioButtonFemale;
-    private Button btnAdd,btnUpdate;
-    private MyAdapter myAdapter;
-    private int currPositon;//vi tri hien tai
-    @Override
+    private RadioButton btnMale,btnFemale;//tich chon nam hay nu
+    private EditText editTextName,editTextId;//hai cai edit text
+    private int curPsiton;//luuu lai vi tri can phai thay thoi tren recycle View
+    private List<String> nameList,idList,gentleList;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         // Đinh Văn Hòa (hoamz)
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData();
-        initView();
-        myAdapter = new MyAdapter(idList,nameList,gentleList);
-        myAdapter.setOnMyItemListener(new MyAdapter.onMyItemListener() {
-            @Override
-            public void doSt(int position) {
-                currPositon = position;//gan vi tri hien tai
-                //hien thi noi dung nen edText1,2
-                edText1.setText(myAdapter.listName.get(position));
-                edText2.setText(myAdapter.listID.get(position));
-                if(Objects.equals(myAdapter.listGentle.get(position), Student.male)){
-                    radioButtonMale.setChecked(true);
-                }
-                else radioButtonFemale.setChecked(true);
-                //lam sang nut update
-                BtnUpdateLight();
-            }
-        });
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,1));//set layout cho recyclerView
-        handleAddClick();
-        handleUpdateClick();
-    }
+        initView();//anh xa cac thanh phan theo ID
+        adapter = new MyAdapter(nameList,idList,gentleList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        adapter.setMyItemListener(this);
 
-    //reset du lieu o text name va text ID ve null (ca radiobutton mac dinh ve male
-    public void clearEditText(){
-        edText1.setText("");
-        edText2.setText("");
-        radioButtonMale.setChecked(true);//sau khi goi ham nay thi thanh nhap ten va thanh nhap ID se reset,nut chon mac dinh dat vao male
-    }
-    private void handleAddClick() {
-        btnAdd.setOnClickListener(v -> {
-            Student student = pickDataFromForm();
-            myAdapter.addStudent(student.getName(),student.getIdStudent(),student.getGentleStudent());
-            clearEditText();
-        });
-    }
-
-    //method update dulieu nen form
-    private void handleUpdateClick(){
-        btnUpdate.setOnClickListener(v -> {
-            Student student = pickDataFromForm();
-            myAdapter.updateStudent(currPositon,student.getName(),student.getIdStudent(),student.getGentleStudent());
-            clearEditText();
-            BtnAddLight();//lam sang nut add
-        });
+        //goi ham xu ly tac vu them student
+        handleBtnAdd();
+        //goi ham xu ly tac vu update student
+        handleUpdate();
     }
 
 
-    private Student pickDataFromForm() {
-        //lay du lieu tren 2 cai edit text va tren cai radio group->image phu hop vs gioi tinh
-        String name = edText1.getText().toString();
-        String ID = edText2.getText().toString();
-        int check = radioGroup.getCheckedRadioButtonId();
-        //dung toan tu 3 ngoi
-        String gentleStudent = (check == R.id.radioBtnBoy) ? Student.male : Student.female;
-        return new Student(name,ID,gentleStudent);
-    }
-
+    //anh xa cac thanh phan tren giao dien thong qua ID
     private void initView() {
-        //anh xa nhung thu tren main chinh
         recyclerView = findViewById(R.id.rcView);
-        edText1 = findViewById(R.id.edTextName);
-        edText2 = findViewById(R.id.edTextId);
+        editTextId = findViewById(R.id.edTextId);
+        editTextName = findViewById(R.id.edTextName);
         radioGroup = findViewById(R.id.radioGr);
-        radioButtonMale = findViewById(R.id.radioBtnBoy);
-        radioButtonFemale = findViewById(R.id.radioBtnGirl);
-        btnAdd = findViewById(R.id.btnAddPle);
-        btnUpdate = findViewById(R.id.btnUpdatePle);
-    }
-
-    //method de nut add tat va nut update sang
-    private void BtnUpdateLight(){
-        btnAdd.setEnabled(false);
-        btnUpdate.setEnabled(true);
-    }
-    //method de nut add sang va nut update tat
-    private void BtnAddLight(){
-        btnAdd.setEnabled(true);
-        btnUpdate.setEnabled(false);
+        btnFemale = findViewById(R.id.radioBtnGirl);
+        btnMale = findViewById(R.id.radioBtnBoy);
+        btnAddStudent = findViewById(R.id.btnAddPle);
+        btnUpdateStudent = findViewById(R.id.btnUpdatePle);
     }
 
     private void initData() {
-        //ham nhan du lieu
         List<Student> studentList = new ArrayList<>();
-        studentList.add(new Student("hoamz","CT08",Student.female));
-        studentList.add(new Student("Anh","CT08",Student.male));
-        studentList.add(new Student("Ngoc","CT08",Student.female));
-        studentList.add(new Student("Linh","CT08",Student.female));
-        studentList.add(new Student("Tuan","CT08",Student.male));
-        studentList.add(new Student("Hoa","CT08",Student.female));
+        studentList.add(new Student("Dinh Van Hoa","CT08",Student.male));
+        studentList.add(new Student("Dinh Van Hoa","CT08",Student.female));
+        studentList.add(new Student("Dinh Van Hoa","CT08",Student.male));
+        studentList.add(new Student("Dinh Van Hoa","CT08",Student.male));
 
-        //tao 3 list tuong ung voi ten,ID,gioi tinh
         nameList = new ArrayList<>();
         idList = new ArrayList<>();
         gentleList = new ArrayList<>();
-
-        for(Student st : studentList){
-            //do du lieu vao ba list
-            nameList.add(st.getName());
-            idList.add(st.getIdStudent());
-            gentleList.add(st.getGentleStudent());
+        //chuyen du lieu sang list
+        for(Student student : studentList){
+            nameList.add(student.getName());
+            idList.add(student.getIdStudent());
+            gentleList.add(student.getGentleStudent());
         }
     }
 
+    private void handleBtnAdd() {
+        btnAddStudent.setOnClickListener(v -> {
+            if(returnDataFromInput() != null) {
+                Student student = returnDataFromInput();
+                adapter.addStudent(student.getName(), student.getIdStudent(), student.getGentleStudent());
+                clearInput();
+            }
+        });
+    }
+
+    private void handleUpdate() {
+        btnUpdateStudent.setOnClickListener(v -> {
+            if(returnDataFromInput() != null) {
+                Student student = returnDataFromInput();//tra ve mot sinh vien da lay duoc tren 2 cai edtit text va 1 cai gioi tinh lay duoc tren radio group
+                adapter.updateStudent(curPsiton, student.getName(), student.getIdStudent(), student.getGentleStudent());
+                clearInput();
+                //sau khi update xong vao recycle view
+                makeLightBtnAdd();//lam sang nut add
+            }
+        });
+    }
+
+    //viet mot method de lay du lieu nhap vaop gom 2 cai edit text va mot cai radio group
+    public Student returnDataFromInput(){
+        try {
+            String nameStudent = editTextName.getText().toString();
+            String idStudent = editTextId.getText().toString();
+            int imgCheck = radioGroup.getCheckedRadioButtonId();
+            String gentleStudent = (imgCheck == R.id.radioBtnBoy) ? Student.male : Student.female;
+            if(nameStudent.isEmpty() || idStudent.isEmpty()){
+                throw new IllegalArgumentException("Nhap thieu thong tin");
+            }
+            return new Student(nameStudent,idStudent,gentleStudent);
+        }
+        catch (IllegalArgumentException ignored) {
+            Toast.makeText(MainActivity.this, "Nhap thieu thong tin", Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
+
+    //clear edit text ve trong sau khi them
+    public void clearInput(){
+        editTextName.setText("");
+        editTextId.setText("");
+        btnMale.setChecked(true);
+    }
+
+    //lam sang nut aâ va tat nut update
+    public void makeLightBtnAdd(){
+        btnAddStudent.setEnabled(true);
+        btnUpdateStudent.setEnabled(false);
+    }
+    //lam sang nut update va tat nut add student
+    public void makeLightBtnUpdate(){
+        btnAddStudent.setEnabled(false);
+        btnUpdateStudent.setEnabled(true);
+    }
+
+    @Override
+    //method khi nhap vao card view
+    public void doSt(int position) {
+        curPsiton = position;
+        //do du lieu tu trong cardView nen edit text
+        editTextName.setText(nameList.get(position));
+        editTextId.setText(idList.get(position));
+        if (Objects.equals(gentleList.get(position), Student.male))
+            btnMale.setChecked(true);
+        else btnFemale.setChecked(true);
+        makeLightBtnUpdate();//lam sang nut update
+    }
 }

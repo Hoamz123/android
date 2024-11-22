@@ -13,101 +13,97 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.crud_2.R;
 
-import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Objects;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHodel> {
-    public interface onMyItemListener{
-        void doSt(int position);
+    //khai bao nhung list de do du lieu nen recycleView
+    private final List<String> LnameStudent;//du lieu ten sinh vien
+    private final List<String> LidStudent;//du lieu id sinh vien
+    private final List<String> LgentleStudent;// du lieu gioi tinh sinh vien
+
+    //interface nay de tu ben ngoai co the tac dong vao ben trong recycle view
+    public onMyItemListener myItemListener;
+
+    public void setMyItemListener(onMyItemListener myItemListener) {
+        this.myItemListener = myItemListener;
     }
 
-    private onMyItemListener onMyItemListener;
-
-    public void setOnMyItemListener(MyAdapter.onMyItemListener onMyItemListener) {
-        this.onMyItemListener = onMyItemListener;
-    }
-
-    public final List<String> listName;
-    public final List<String> listGentle;
-    public final List<String> listID;
-
-    public MyAdapter(List<String> listID, List<String> listName, List<String> listGentle) {
-        this.listName = listName;
-        this.listGentle = listGentle;
-        this.listID = listID;
+    public MyAdapter(List<String> nameStudent, List<String> IDStudent, List<String> gentleStudent) {
+        this.LnameStudent = nameStudent;
+        this.LidStudent = IDStudent;
+        this.LgentleStudent = gentleStudent;
     }
 
     @NonNull
     @Override
+    //method nay muc dich la tao ra mot doi tuong MyViewHodel moi
     public MyViewHodel onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detail,parent,false);
         return new MyViewHodel(view);
     }
 
-    //for(int position = 0;position < listGentle.size();position++)
     @Override
     public void onBindViewHolder(@NonNull MyViewHodel holder, int position) {
-        //neu position la nam thi truyen anh nam,else thi truyen anh nu
-        int imgId = (Objects.equals(listGentle.get(position), Student.male)) ? R.drawable.male : R.drawable.female;
-        holder.imageView.setImageResource(imgId);
-        holder.textView.setText(String.format("%-20s %s", listName.get(position), listID.get(position)));
+        //qia hodel de tac dong den cac du lieu xuat hien tren recycleView
+        int imgID = (Objects.equals(LgentleStudent.get(position), Student.male)) ? R.drawable.male : R.drawable.female;
+        holder.imgView.setImageResource(imgID);
+        holder.txtView.setText(String.format("%-10s %s", LnameStudent.get(position), LidStudent.get(position)));
 
+        //xu li nut delete tren recycle view view thong qua hodel
         holder.btnDelete.setOnClickListener(v -> {
-            String nameRemove = listName.get(position);
-            String idRemove = listID.get(position);
-            String gentleRemove = listGentle.get(position);
-            deleteItem(nameRemove,idRemove, gentleRemove);
+            deleteStudent(LnameStudent.get(position),LidStudent.get(position),LgentleStudent.get(position));
         });
+        //xu li khi user chon vao cardView
         holder.cardView.setOnClickListener(v -> {
-            onMyItemListener.doSt(position);
+            myItemListener.doSt(position);
         });
     }
 
-
+    //method nay tra ve kich co cua list muc dic la dung cho viec lap lai
     @Override
     public int getItemCount() {
-        return listGentle.size();
+        return  LgentleStudent.size();
     }
 
-    public static class MyViewHodel extends RecyclerView.ViewHolder {
-        //khai bao nhung cai xuat hien tren recyclerview
+    public static class MyViewHodel extends RecyclerView.ViewHolder{
+        //khai bao nhung thanh phan xuat hien tran recycle View
         private final CardView cardView;
-        private final ImageView imageView;
-        private final TextView textView;
+        private final TextView txtView;
+        private final ImageView imgView;
         private final Button btnDelete;
+
         public MyViewHodel(@NonNull View itemView) {
             super(itemView);
-            //anh xa thong qua itemView nhung cai xuat hien trong item trong recycleView
+            //anh xa
             cardView = itemView.findViewById(R.id.cardview);
-            textView = itemView.findViewById(R.id.txtView);
+            txtView = itemView.findViewById(R.id.txtView);
+            imgView = itemView.findViewById(R.id.imgView);
             btnDelete = itemView.findViewById(R.id.btnDelete);
-            imageView = itemView.findViewById(R.id.imgView);
         }
     }
 
-    //them student
-    public void addStudent(String name, String ID, String gentle){
-        listName.add(name);
-        listID.add(ID);
-        listGentle.add(gentle);
-        notifyDataSetChanged();//thay doi du lieu
-    }
-
-    //xoa student
-    public void deleteItem(String name,String ID,String gentle){
-        listName.remove(name);
-        listID.remove(ID);
-        listGentle.remove(gentle);
+    //method them sinh vien vao recycle view
+    public void addStudent(String nameStudent,String idStudent,String gentleStudent){
+        LnameStudent.add(nameStudent);
+        LidStudent.add(idStudent);
+        LgentleStudent.add(gentleStudent);
         notifyDataSetChanged();
     }
 
-    //update student
-    public void updateStudent(int position,String name,String ID,String gentle){
-        //dat lai du lieu
-        listName.set(position,name);
-        listID.set(position,ID);
-        listGentle.set(position,gentle);
+    //method xoa sinh vien khoi recycle view
+    public void deleteStudent(String nameStudent,String idStudent,String gentleStudent){
+        LnameStudent.remove(nameStudent);
+        LidStudent.remove(idStudent);
+        LgentleStudent.remove(gentleStudent);
+        notifyDataSetChanged();
+    }
+
+    //method update sinh vien
+    public void updateStudent(int position,String nameStudent,String idStudent,String gentleStudent){
+        LnameStudent.set(position,nameStudent);
+        LidStudent.set(position,idStudent);
+        LgentleStudent.set(position,gentleStudent);
         notifyDataSetChanged();
     }
 }
