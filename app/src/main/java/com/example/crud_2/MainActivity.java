@@ -1,5 +1,6 @@
 package com.example.crud_2;
 
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,133 +22,158 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements onMyItemListener {
-    //khai bao nhung thu xuat hien tren giao dien chinh va can thao tac voi no
-    private RecyclerView recyclerView;
+    private List<String> gentleSt;
+    private List<String> nameSt;
+    private List<String> idSt;
     private MyAdapter adapter;
-    private Button btnAddStudent,btnUpdateStudent;//hai nut them va sua
+    private RecyclerView recyclerView;
+    private EditText editTextName,editTextId;
+    private Button btnAdd,btnUpdate;
     private RadioGroup radioGroup;
-    private RadioButton btnMale,btnFemale;//tich chon nam hay nu
-    private EditText editTextName,editTextId;//hai cai edit text
-    private int curPsiton;//luuu lai vi tri can phai thay thoi tren recycle View
-    private List<String> nameList,idList,gentleList;
-
+    private RadioButton radioButtonMale,radioButtonFemale;
+    private int currPos;//luu lai chi so hien tai cua obj dang moon sua
 
     protected void onCreate(Bundle savedInstanceState) {
+
         // Đinh Văn Hòa (hoamz)
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initData();
-        initView();//anh xa cac thanh phan theo ID
-        adapter = new MyAdapter(nameList,idList,gentleList);
+        initData();//du lieu dau vao
+        initView();//anh xa qua ID
+        adapter = new MyAdapter(gentleSt,nameSt,idSt);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        //giao tiep voi recycle view thong qua adapter
         adapter.setMyItemListener(this);
 
-        //goi ham xu ly tac vu them student
+        //khoa dung man hinh
+
+
+        //method khi nhan nut addStudent
         handleBtnAdd();
-        //goi ham xu ly tac vu update student
-        handleUpdate();
+        handleBtnUpdate();
+
     }
 
-
-    //anh xa cac thanh phan tren giao dien thong qua ID
     private void initView() {
         recyclerView = findViewById(R.id.rcView);
-        editTextId = findViewById(R.id.edTextId);
         editTextName = findViewById(R.id.edTextName);
+        editTextId = findViewById(R.id.edTextId);
         radioGroup = findViewById(R.id.radioGr);
-        btnFemale = findViewById(R.id.radioBtnGirl);
-        btnMale = findViewById(R.id.radioBtnBoy);
-        btnAddStudent = findViewById(R.id.btnAddPle);
-        btnUpdateStudent = findViewById(R.id.btnUpdatePle);
+        radioButtonMale = findViewById(R.id.radioBtnMale);
+        radioButtonFemale = findViewById(R.id.radioBtnFemale);
+        btnAdd = findViewById(R.id.btnAddPle);
+        btnUpdate = findViewById(R.id.btnUpdatePle);
     }
 
     private void initData() {
         List<Student> studentList = new ArrayList<>();
-        studentList.add(new Student("Dinh Van Hoa","CT08",Student.male));
-        studentList.add(new Student("Dinh Van Hoa","CT08",Student.female));
-        studentList.add(new Student("Dinh Van Hoa","CT08",Student.male));
-        studentList.add(new Student("Dinh Van Hoa","CT08",Student.male));
+        //them du lieu thu cong
+        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.male));
+        studentList.add(new Student("Đinh Hoà Văn","HHTB",Student.male));
+        studentList.add(new Student("Văn Đinh Hòa","HHTB",Student.male));
+        studentList.add(new Student("Văn Hòa Đinh","HHTB",Student.male));
+        studentList.add(new Student("Hòa Đinh Văn","HHTB",Student.male));
 
-        nameList = new ArrayList<>();
-        idList = new ArrayList<>();
-        gentleList = new ArrayList<>();
-        //chuyen du lieu sang list
+        //khoi tao 3 list chua thong tin can do nen recycle view
+        gentleSt = new ArrayList<>();
+        nameSt = new ArrayList<>();
+        idSt = new ArrayList<>();
+
+        //do du lieu nen
         for(Student student : studentList){
-            nameList.add(student.getName());
-            idList.add(student.getIdStudent());
-            gentleList.add(student.getGentleStudent());
+            gentleSt.add(student.getGentleStudent());
+            nameSt.add(student.getName());
+            idSt.add(student.getIdStudent());
         }
     }
 
-    private void handleBtnAdd() {
-        btnAddStudent.setOnClickListener(v -> {
-            if(returnDataFromInput() != null) {
-                Student student = returnDataFromInput();
-                adapter.addStudent(student.getName(), student.getIdStudent(), student.getGentleStudent());
-                clearInput();
+    //trien khai method handleAdd();
+    public void handleBtnAdd(){
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(returnInputOfUser() != null){
+                    Student student = returnInputOfUser();
+                    adapter.addStudent(student.getName(),student.getIdStudent(),student.getGentleStudent());
+                }
+                //sau khi add xong thi xoa
+                clearInputOfUser();
             }
         });
     }
 
-    private void handleUpdate() {
-        btnUpdateStudent.setOnClickListener(v -> {
-            if(returnDataFromInput() != null) {
-                Student student = returnDataFromInput();//tra ve mot sinh vien da lay duoc tren 2 cai edtit text va 1 cai gioi tinh lay duoc tren radio group
-                adapter.updateStudent(curPsiton, student.getName(), student.getIdStudent(), student.getGentleStudent());
-                clearInput();
-                //sau khi update xong vao recycle view
-                makeLightBtnAdd();//lam sang nut add
+
+    //trien khai method handleUpdate();
+    public void handleBtnUpdate(){
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(returnInputOfUser() != null){
+                    Student student = returnInputOfUser();
+                    adapter.updateSt(currPos,student.getName(),student.getIdStudent(),student.getGentleStudent());
+                }
+                //lam sang nut add
+                makeLightBtnAdd();
+                //sau khi update xong thi xoa
+                clearInputOfUser();
             }
         });
     }
 
-    //viet mot method de lay du lieu nhap vaop gom 2 cai edit text va mot cai radio group
-    public Student returnDataFromInput(){
+    //method lay du lieu tu user input
+    public Student returnInputOfUser(){
         try {
-            String nameStudent = editTextName.getText().toString();
-            String idStudent = editTextId.getText().toString();
-            int imgCheck = radioGroup.getCheckedRadioButtonId();
-            String gentleStudent = (imgCheck == R.id.radioBtnBoy) ? Student.male : Student.female;
-            if(nameStudent.isEmpty() || idStudent.isEmpty()){
+            String nameUser = editTextName.getText().toString();
+            String idUser = editTextId.getText().toString();
+            //check xem user nhan chon male or female
+            int checkImgUser = radioGroup.getCheckedRadioButtonId();
+            String gentleUser = (checkImgUser == R.id.radioBtnMale) ? Student.male : Student.female;
+
+            if(nameUser.isEmpty() || idUser.isEmpty()){
+                //neu user nhap thieu
                 throw new IllegalArgumentException("Nhap thieu thong tin");
             }
-            return new Student(nameStudent,idStudent,gentleStudent);
+            return new Student(nameUser,idUser,gentleUser);
         }
-        catch (IllegalArgumentException ignored) {
-            Toast.makeText(MainActivity.this, "Nhap thieu thong tin", Toast.LENGTH_SHORT).show();
+        catch (IllegalArgumentException ex) {
+            Toast.makeText(this, "Nhap thieu thong tin", Toast.LENGTH_SHORT).show();
         }
         return null;
     }
 
-    //clear edit text ve trong sau khi them
-    public void clearInput(){
+    @Override
+    public void doSt(int pos) {
+        currPos = pos;
+        //day du lieu tu recycle view nen edit text
+        editTextName.setText(nameSt.get(pos));
+        editTextId.setText(idSt.get(pos));
+
+        if(Objects.equals(gentleSt.get(pos), Student.male)){
+            radioButtonMale.setChecked(true);
+        }
+        else{
+            radioButtonFemale.setChecked(true);
+        }
+        makeLightBtnUpdate();//lam snag nut update
+    }
+
+    //method lam sang nut add sau khi user nhap xong du lieu dau vao
+    public void makeLightBtnAdd() {
+        btnAdd.setEnabled(true);
+        btnUpdate.setEnabled(false);
+    }
+
+    //method lam sang nut update sau khi user bam vao card view
+    public void makeLightBtnUpdate() {
+        btnAdd.setEnabled(false);
+        btnUpdate.setEnabled(true);
+    }
+
+    //viet method xoa tat ca du lieu tren edit text khi add xong hay update xong
+    public void clearInputOfUser(){
         editTextName.setText("");
         editTextId.setText("");
-        btnMale.setChecked(true);
-    }
-
-    //lam sang nut aâ va tat nut update
-    public void makeLightBtnAdd(){
-        btnAddStudent.setEnabled(true);
-        btnUpdateStudent.setEnabled(false);
-    }
-    //lam sang nut update va tat nut add student
-    public void makeLightBtnUpdate(){
-        btnAddStudent.setEnabled(false);
-        btnUpdateStudent.setEnabled(true);
-    }
-
-    @Override
-    //method khi nhap vao card view
-    public void doSt(int position) {
-        curPsiton = position;
-        //do du lieu tu trong cardView nen edit text
-        editTextName.setText(nameList.get(position));
-        editTextId.setText(idList.get(position));
-        if (Objects.equals(gentleList.get(position), Student.male))
-            btnMale.setChecked(true);
-        else btnFemale.setChecked(true);
-        makeLightBtnUpdate();//lam sang nut update
+        radioButtonMale.setChecked(true);
     }
 }

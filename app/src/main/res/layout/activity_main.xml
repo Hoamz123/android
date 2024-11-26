@@ -41,6 +41,7 @@
         </TextView>
         <EditText
             android:id="@+id/edTextName"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -69,6 +70,7 @@
 
         <EditText
             android:id="@+id/edTextId"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -106,7 +108,7 @@
             tools:ignore="UselessParent">
 
             <RadioButton
-                android:id="@+id/radioBtnBoy"
+                android:id="@+id/radioBtnMale"
                 android:layout_width="wrap_content"
                 android:checked="true"
                 android:layout_height="wrap_content"
@@ -115,7 +117,7 @@
             </RadioButton>
 
             <RadioButton
-                android:id="@+id/radioBtnGirl"
+                android:id="@+id/radioBtnFemale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
