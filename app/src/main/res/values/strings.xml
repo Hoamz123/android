@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CRUD_2</string>
+    <string name="app_name">QLSV</string>
     <string name="setting">Setting</string>
     <string name="logout">Log out</string>
     <string name="qlsv">Quản lý sinh viên</string>
@@ -12,4 +12,5 @@
     <string name="update">Update</string>
     <string name="listSt">List of student</string>
     <string name="delete">Delete</string>
+    <string name="Search">Search</string>
 </resources>

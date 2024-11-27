@@ -1,15 +1,22 @@
 package com.example.crud_2;
 
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,9 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements onMyItemListener {
-    private List<String> gentleSt;
-    private List<String> nameSt;
-    private List<String> idSt;
+    private List<Student> studentList;
     private MyAdapter adapter;
     private RecyclerView recyclerView;
     private EditText editTextName,editTextId;
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
     private RadioGroup radioGroup;
     private RadioButton radioButtonMale,radioButtonFemale;
     private int currPos;//luu lai chi so hien tai cua obj dang moon sua
+    private SearchView searchView;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,14 +46,19 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
         setContentView(R.layout.activity_main);
         initData();//du lieu dau vao
         initView();//anh xa qua ID
-        adapter = new MyAdapter(gentleSt,nameSt,idSt);
+        adapter = new MyAdapter(this, studentList);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+
+        //tao vach phan cach giua cac item trong recView
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
+
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         //giao tiep voi recycle view thong qua adapter
         adapter.setMyItemListener(this);
 
         //khoa dung man hinh
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //method khi nhan nut addStudent
         handleBtnAdd();
@@ -67,25 +78,13 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
     }
 
     private void initData() {
-        List<Student> studentList = new ArrayList<>();
+        studentList = new ArrayList<>();
         //them du lieu thu cong
         studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.male));
-        studentList.add(new Student("Đinh Hoà Văn","HHTB",Student.male));
-        studentList.add(new Student("Văn Đinh Hòa","HHTB",Student.male));
-        studentList.add(new Student("Văn Hòa Đinh","HHTB",Student.male));
         studentList.add(new Student("Hòa Đinh Văn","HHTB",Student.male));
-
-        //khoi tao 3 list chua thong tin can do nen recycle view
-        gentleSt = new ArrayList<>();
-        nameSt = new ArrayList<>();
-        idSt = new ArrayList<>();
-
-        //do du lieu nen
-        for(Student student : studentList){
-            gentleSt.add(student.getGentleStudent());
-            nameSt.add(student.getName());
-            idSt.add(student.getIdStudent());
-        }
+        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.female));
+        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.female));
+        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.female));
     }
 
     //trien khai method handleAdd();
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
             public void onClick(View v) {
                 if(returnInputOfUser() != null){
                     Student student = returnInputOfUser();
-                    adapter.addStudent(student.getName(),student.getIdStudent(),student.getGentleStudent());
+                    adapter.addStudent(student);
                 }
                 //sau khi add xong thi xoa
                 clearInputOfUser();
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
             public void onClick(View v) {
                 if(returnInputOfUser() != null){
                     Student student = returnInputOfUser();
-                    adapter.updateSt(currPos,student.getName(),student.getIdStudent(),student.getGentleStudent());
+                    adapter.updateSt(currPos,student);
                 }
                 //lam sang nut add
                 makeLightBtnAdd();
@@ -146,10 +145,10 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
     public void doSt(int pos) {
         currPos = pos;
         //day du lieu tu recycle view nen edit text
-        editTextName.setText(nameSt.get(pos));
-        editTextId.setText(idSt.get(pos));
+        editTextName.setText(studentList.get(pos).getName());
+        editTextId.setText(studentList.get(pos).getIdStudent());
 
-        if(Objects.equals(gentleSt.get(pos), Student.male)){
+        if(Objects.equals(studentList.get(pos).getGentleStudent(), Student.male)){
             radioButtonMale.setChecked(true);
         }
         else{
@@ -176,4 +175,29 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
         editTextId.setText("");
         radioButtonMale.setChecked(true);
     }
+
+
+    //hien thanh toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+
+        assert searchView != null;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
+    }
+
 }
