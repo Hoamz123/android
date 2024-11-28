@@ -11,8 +11,8 @@ android {
     defaultConfig {
         applicationId = "com.example.crud_2"
         minSdk = 24
-        targetSdk = 34
         versionCode = 1
+        targetSdk = 34
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -45,4 +45,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.circleimageview)
 }
