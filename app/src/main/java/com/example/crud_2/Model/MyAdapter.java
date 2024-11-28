@@ -57,25 +57,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         holder.txtView.setText(String.format("Name: %-10s\n\nID: %s",studentList.get(position).getName(),studentList.get(position).getIdStudent()));
 
         //do nut xoa nam trong recycle view nen thao tac duoc luon trong method nay
-        holder.btnDelete.setOnClickListener(v -> {
-            //hoc AlertDialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Notice");
+        holder.cardView.setOnLongClickListener(v -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);//truyen context ben giao dien chin hvao
+            builder.setTitle("Notification");
             builder.setMessage("Do you want to delete ?");
-            builder.setIcon(android.R.drawable.ic_delete);
-
-            //neu dong y xoa
-           builder.setPositiveButton("Yes", (dialog, which) -> {
-               //day du lieu can xoa vao ham xoa
-               deleteSt(studentList.get(position));//xoa thanh phan o vi tri pos
-           });
-
-            //neu khong dong y xoa
-            builder.setNegativeButton("No", (dialog, which) -> {
-
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            //case dong y xoa
+            builder.setPositiveButton("Yes", (dialog, which) -> deleteSt(studentList.get(position)));
+            //case khong dong y xoa
+            builder.setNegativeButton("No", (dialog, which) -> {});
+            //create
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
         });
 
         holder.cardView.setOnClickListener(v -> myItemListener.doSt(position));
@@ -93,14 +87,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         //khai bao nhung thu xuat hien tren recycle view
         private final CardView cardView;
         private final TextView txtView;
-        private final Button btnDelete;
         private final ImageView img;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             //anh xa qua ID
             cardView = itemView.findViewById(R.id.cardview);
             txtView = itemView.findViewById(R.id.txtView);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
             img = itemView.findViewById(R.id.imgView);
         }
     }

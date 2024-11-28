@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background_color">#8EB6DE</color>  <!-- Nền sáng -->
+    <color name="text_color">#000000</color>        <!-- Chữ tối -->
+    <color name="w">#E0E0E0</color>
 </resources>

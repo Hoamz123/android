@@ -5,8 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:backgroundTint="@color/background_color"
     android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
-    android:background="@color/white"
     tools:context=".MainActivity">
 
 
@@ -14,38 +15,48 @@
         android:id="@+id/txtViewQlsv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/qlsv"
-        android:textSize="20sp"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/qlsv"
+        android:textColor="#06111C"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintBottom_toTopOf="@id/linear1">
+
     </TextView>
 
     <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/txtViewQlsv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/txtViewQlsv">
 
         <TextView
             android:id="@+id/txtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="@string/name"
+            android:textColor="#06111C"
             android:textSize="15sp"
-            android:layout_marginStart="10dp">
+            android:textStyle="bold">
+
         </TextView>
+
         <EditText
             android:id="@+id/edTextName"
-            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginEnd="10dp"
+            android:inputType="text"
+            android:textColor="#06111C"
+            android:textStyle="bold">
+
         </EditText>
 
     </LinearLayout>
@@ -55,26 +66,31 @@
         android:id="@+id/linear2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/linear1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/linear1">
 
         <TextView
             android:id="@+id/txtID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="@string/maSv"
+            android:textColor="#06111C"
             android:textSize="15sp"
-            android:layout_marginStart="10dp">
+            android:textStyle="bold">
+
         </TextView>
 
         <EditText
             android:id="@+id/edTextId"
-            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginEnd="10dp"
+            android:inputType="text"
+            android:textColor="#06111C"
+            android:textStyle="bold">
         </EditText>
 
     </LinearLayout>
@@ -84,10 +100,10 @@
         android:id="@+id/linear3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/linear2"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/linear2">
 
         <TextView
             android:layout_width="wrap_content"
@@ -96,7 +112,9 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/txtGioiTinh"
-            android:textSize="15sp">
+            android:textColor="#06111C"
+            android:textSize="15sp"
+            android:textStyle="bold">
         </TextView>
 
 
@@ -110,10 +128,12 @@
             <RadioButton
                 android:id="@+id/radioBtnMale"
                 android:layout_width="wrap_content"
-                android:checked="true"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:text="@string/Nam">
+                android:checked="true"
+                android:text="@string/Nam"
+                android:textColor="#06111C"
+                android:textStyle="bold">
             </RadioButton>
 
             <RadioButton
@@ -121,7 +141,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:text="@string/Nu">
+                android:text="@string/Nu"
+                android:textColor="#06111C"
+                android:textStyle="bold">
             </RadioButton>
 
         </RadioGroup>
@@ -130,12 +152,12 @@
 
     <LinearLayout
         android:id="@id/linear4"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/linear3"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/linear3">
 
         <Button
             android:id="@+id/btnAddPle"
@@ -144,7 +166,8 @@
             android:layout_marginStart="70dp"
             android:background="#43BDBDBD"
             android:text="@string/add"
-            android:textColor="@color/black">
+            android:textColor="#06111C"
+            android:textStyle="bold">
         </Button>
 
         <Button
@@ -152,25 +175,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:background="#43BDBDBD"
-            android:text="@string/update"
+            android:background="#5ABDBDBD"
             android:enabled="false"
-            android:textColor="@color/black">
+            android:text="@string/update"
+            android:textColor="@color/black"
+            android:textStyle="bold">
         </Button>
     </LinearLayout>
 
     <TextView
         android:id="@+id/txtListSt"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/listSt"
-        android:textSize="15sp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/linear4"
+        android:text="@string/listSt"
+        android:textColor="#06111C"
+        android:textSize="15sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/linear4">
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -182,19 +207,46 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtListSt">
+
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/createBy"
         android:layout_marginStart="280dp"
+        android:text="@string/createBy"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="0.0">
+
     </TextView>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/search"
+        app:closeIcon="@drawable/delete"
+        app:searchIcon="@android:drawable/ic_menu_search"
+
+
+        app:iconifiedByDefault="false"
+        app:searchHintIcon="@null"
+        android:focusable="false"
+        app:queryHint="@string/search"
+
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txtViewQlsv">
+
+    </androidx.appcompat.widget.SearchView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

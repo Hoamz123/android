@@ -1,7 +1,9 @@
 package com.example.crud_2;
 
 
+import android.app.ActivityManager;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,7 +66,24 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
         //method khi nhan nut addStudent
         handleBtnAdd();
         handleBtnUpdate();
+        method_Search();
 
+    }
+
+    private void method_Search() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     private void initView() {
@@ -75,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
         radioButtonFemale = findViewById(R.id.radioBtnFemale);
         btnAdd = findViewById(R.id.btnAddPle);
         btnUpdate = findViewById(R.id.btnUpdatePle);
+        searchView = findViewById(R.id.search);
     }
 
     private void initData() {
@@ -174,30 +195,6 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
         editTextName.setText("");
         editTextId.setText("");
         radioButtonMale.setChecked(true);
-    }
-
-
-    //hien thanh toolbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
-        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-
-        assert searchView != null;
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-        return true;
     }
 
 }

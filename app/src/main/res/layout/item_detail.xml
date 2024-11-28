@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/cardview"
-    android:background="@color/white"
+    android:background="@color/background_color"
     android:layout_height="wrap_content">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/background_color"
         android:layout_height="wrap_content">
 
 
@@ -19,8 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="250dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="300dp"
             android:src="@drawable/imgbook">
         </ImageView>
 
@@ -38,28 +38,18 @@
             android:id="@+id/txtView"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_margin="10dp"
+            android:layout_marginStart="5dp"
             android:padding="15dp"
             android:text="@string/app_name"
+            android:textStyle="bold"
             android:textSize="15sp"
+            android:textColor="#06111C"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnDelete"
             app:layout_constraintStart_toEndOf="@id/imgView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
         </TextView>
-
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="38dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_height="38dp"
-            android:layout_gravity="end"
-            android:background="@drawable/delete">
-        </Button>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
