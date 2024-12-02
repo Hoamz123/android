@@ -37,7 +37,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     public MyAdapter(Context context,List<Student> studentList) {
         this.context = context;
         this.studentList = studentList;
-        this.tmpStudentList = studentList;
+        this.tmpStudentList = new ArrayList<>(studentList);
     }
 
     //method nay se tao ra mot view holder moi
@@ -61,6 +61,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);//truyen context ben giao dien chin hvao
             builder.setTitle("Notification");
+            builder.setIcon(android.R.drawable.ic_menu_info_details);
             builder.setMessage("Do you want to delete ?");
             //case dong y xoa
             builder.setPositiveButton("Yes", (dialog, which) -> deleteSt(studentList.get(position)));
@@ -100,24 +101,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     //viet method xoa 1 item trong list recycle view
     @SuppressLint("NotifyDataSetChanged")
     public void deleteSt(Student student){
-        studentList.remove(student);
         tmpStudentList.remove(student);
+        studentList.remove(student);
         notifyDataSetChanged();
     }
 
     //viet method cho them mot item vao rcView
     @SuppressLint("NotifyDataSetChanged")
     public void addStudent(Student student){
-        studentList.add(student);
         tmpStudentList.add(student);
+        studentList.add(student);
         notifyDataSetChanged();
     }
 
     //viet method sua du lieu
     @SuppressLint("NotifyDataSetChanged")
     public void updateSt(int pos,Student student){
+        int idx = tmpStudentList.indexOf(tmpStudentList.get(pos));
+        if(idx != -1){
+            tmpStudentList.set(pos,student);
+        }
         studentList.set(pos,student);
-        tmpStudentList.set(pos,student);
         notifyDataSetChanged();
     }
 

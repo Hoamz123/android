@@ -102,10 +102,10 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
         studentList = new ArrayList<>();
         //them du lieu thu cong
         studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.male));
-        studentList.add(new Student("Hòa Đinh Văn","HHTB",Student.male));
-        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.female));
-        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.female));
-        studentList.add(new Student("Đinh Văn Hòa","HHTB",Student.female));
+        studentList.add(new Student("Hòa Đinh Văn","CT8B",Student.male));
+        studentList.add(new Student("Đinh Văn Hòa","TB",Student.female));
+        studentList.add(new Student("Đinh Văn Hòa","HN",Student.female));
+        studentList.add(new Student("Đinh Văn Hòa","CT08",Student.female));
     }
 
     //trien khai method handleAdd();
@@ -131,7 +131,11 @@ public class MainActivity extends AppCompatActivity implements onMyItemListener 
             public void onClick(View v) {
                 if(returnInputOfUser() != null){
                     Student student = returnInputOfUser();
-                    adapter.updateSt(currPos,student);
+                    if(studentList.get(currPos) != null){
+                        adapter.updateSt(currPos,student);
+                    }else{
+                        clearInputOfUser();
+                    }
                 }
                 //lam sang nut add
                 makeLightBtnAdd();
